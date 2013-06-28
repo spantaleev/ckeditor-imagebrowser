@@ -49,10 +49,14 @@ CkEditorImageBrowser.addImage = function (folderName, imageUrl, thumbUrl) {
 CkEditorImageBrowser.initFolderSwitcher = function () {
 	var $switcher = $('#js-folder-switcher');
 
-	$switcher.find('option').remove();
+	$switcher.find('li').remove();
 
 	$.each(CkEditorImageBrowser.folders, function (idx, folderName) {
-		var $option = $('<option></option>').val(idx).text(folderName);
+		var $option = $('<li></li>')
+      .text(folderName)
+      .click(function () {
+        CkEditorImageBrowser.renderImagesForFolder(folderName);
+      });
 		$option.appendTo($switcher);
 	});
 
@@ -83,9 +87,7 @@ CkEditorImageBrowser.renderImagesForFolder = function (folderName) {
 
 CkEditorImageBrowser.initEventHandlers = function () {
 	$('#js-folder-switcher').change(function () {
-		var idx = parseInt($(this).val(), 10),
-			folderName = CkEditorImageBrowser.folders[idx];
-
+	  var	folderName = CkEditorImageBrowser.folders[0];
 		CkEditorImageBrowser.renderImagesForFolder(folderName);
 	});
 
