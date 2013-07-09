@@ -15,5 +15,14 @@ body {
 	margin: 5px 10px 5px 0;
 	border: 1px solid #ccc;
 	border-radius: 4px;
+	overflow: hidden;
 	font-size: 0;
 }
+
+img {
+	width: auto;
+	height: auto;
+	max-width: 200px;
+	max-height: 200px;
+}
+
