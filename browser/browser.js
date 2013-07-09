@@ -5,6 +5,12 @@ CkEditorImageBrowser.images = {}; //folder => list of images
 CkEditorImageBrowser.ckFunctionNum = null;
 
 CkEditorImageBrowser.init = function () {
+	var baseHref = decodeURIComponent(CkEditorImageBrowser.getQueryStringParam("baseHref"));
+	if (baseHref) {
+		var h = (document.head || document.getElementsByTagName("head")[0]), el = h.getElementsByTagName("link")[0];
+		el.href = location.href.replace(/\/[^\/]*$/,"/browser.css");
+		(h.getElementsByTagName("base")[0]).href = baseHref;
+	}
 	CkEditorImageBrowser.ckFunctionNum = CkEditorImageBrowser.getQueryStringParam('CKEditorFuncNum');
 
 	CkEditorImageBrowser.initEventHandlers();
@@ -42,7 +48,7 @@ CkEditorImageBrowser.ensureFolderCreated = function (folderName) {
 CkEditorImageBrowser.addImage = function (folderName, imageUrl, thumbUrl) {
 	CkEditorImageBrowser.images[folderName].push({
 		"imageUrl": imageUrl,
-		"thumbUrl": thumbUrl
+		"thumbUrl": thumbUrl||imageUrl
 	});
 };
 
