@@ -1,24 +1,16 @@
 <!doctype html>
 <html>
-	<head>
-		<base>
-		<link rel="stylesheet" href="browser.css">
-	</head>
+<head>
+	<title>Image Browser</title>
+	<base>
+	<link rel="stylesheet" href="browser.css">
+	<script type="text/javascript" src="jquery-1.9.1.min.js"></script>
+	<script type="text/javascript" src="browser.js"></script>
+</head>
 
-	<body>
-		<script type="text/x-template-html" id="js-template-image">
-			<a href="javascript://" class="thumbnail js-image-link" data-url="%imageUrl%"><img src="%thumbUrl%"></a>
-		</script>
-
-		<select class="folder-switcher" id="js-folder-switcher"><option>Loading..</option></select>
-
-		<div id="js-images-container"></div>
-
-		<script type="text/javascript" src="jquery-1.9.1.min.js"></script>
-		<script type="text/javascript" src="browser.js"></script>
-
-		<script type="text/javascript">
-			CkEditorImageBrowser.init();
-		</script>
-	</body>
+<body>
+	<ul></ul>
+	<div id="container"></div>
+	<div id="loadMsg"><div>Loading... <img src="loading.gif"></div></div>
+</body>
 </html>
