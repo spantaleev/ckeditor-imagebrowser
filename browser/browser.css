@@ -1,28 +1,136 @@
 body {
-	margin: 5px;
+	margin: 0;
+	padding: 0;
+	background-color: #FFFFFF;
+	font-family: Arial,Helvetica,sans-serif;
+	overflow: hidden;
 }
 
-.folder-switcher {
+#loadMsg {
+	position: absolute;
+	top: 0;
+	bottom: 0;
 	width: 100%;
-	height: 32px;
+	height: 100%;
+	z-index: 2;
+	background-color: #F0F0F0;  
+}
+
+#loadMsg div {
+	height: 48px;
+	width: 100%;
+	position: absolute;
+	top: 50%;
+	left 0;
+	margin: -24px 0 0;
+	padding: 0;
+	border: 0 none;
+	text-align: center;
+	line-height: 48px;
+	font-size: 36px;
+	color: #000000;
+}
+
+#loadMsg img {
+	border: 0 none;
+	width: 48px;
+	height: 48px;
+	margin-left: 50px;
+}
+
+ul {
+	background-color: #CCCCCC;
+	margin: 0;
+	padding: 5px 15px;
+	border-bottom: 2px solid #808080;
 	font-size: 17px;
 	font-weight: bold;
-	margin-bottom: 15px;
+	height: 44px;
+	max-height: 44px
+	overflow: auto;
+	overflow-y: hidden;
+	white-space: nowrap;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
 }
 
-.thumbnail {
+li {
 	display: inline-block;
-	margin: 5px 10px 5px 0;
-	border: 1px solid #ccc;
-	border-radius: 4px;
-	overflow: hidden;
-	font-size: 0;
+	margin: 5px;
+	padding: 5px 8px;
+	border: 1px solid #CCCCCC;
+	border-radius: 5px;
+	box-shadow: 0 1px 0 rgba(0, 0, 0, 0.2),inset 0 0 0 2px #FFFFFF;
+	background-color: #F0F0F0;
+	font-size: 16px;
+	color: #333333;
+	text-shadow: 0 1px 0 #FFFFFF;
+	line-height: 1.4;
+	white-space: nowrap;
+	transition: 0.2s;
+	transition-timing-function: ease-in-out;
+	cursor: pointer;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+li:hover {
+	position: relative;
+	z-index: 1;
+	-webkit-transform: scale(1.2);
+	transform: scale(1.2);
+}
+
+li.shown {
+	background-color: #E0F0FF;
+}
+
+#container {
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 56px;
+	bottom: 0px;
+	margin: 0;
+	padding: 0;
+	overflow: auto;
+}
+	
+a {
+	display: inline-block;
+	vertical-align: top;
+	text-align:center;
+	margin: 20px 20px 10px;
+	padding: 0;
+	font-size: 12px;
+	line-height: 1.5;
+	color: #808080;
+	text-decoration: none;
 }
 
 img {
+	vertical-align: top;
+	margin: 0;
+	border: 1px solid #CCCCCC;
+	border-radius: 4px;
 	width: auto;
 	height: auto;
 	max-width: 200px;
 	max-height: 200px;
+	transition: 0.4s;
+	transition-timing-function: ease-in-out;
 }
 
+img:hover {
+	max-width: 400px;
+	max-height: 400px;
+}
+
+pre {
+	margin: 10px 0 0;
+	padding: 0;
+}
