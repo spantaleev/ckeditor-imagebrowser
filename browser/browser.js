@@ -1,110 +1,56 @@
-var CkEditorImageBrowser = {};
+"use strict";
+var IB = {
 
-CkEditorImageBrowser.folders = [];
-CkEditorImageBrowser.images = {}; //folder => list of images
-CkEditorImageBrowser.ckFunctionNum = null;
-
-CkEditorImageBrowser.init = function () {
-	var baseHref = decodeURIComponent(CkEditorImageBrowser.getQueryStringParam("baseHref"));
-	if (baseHref) {
-		var h = (document.head || document.getElementsByTagName("head")[0]), el = h.getElementsByTagName("link")[0];
-		el.href = location.href.replace(/\/[^\/]*$/,"/browser.css");
-		(h.getElementsByTagName("base")[0]).href = baseHref;
-	}
-	CkEditorImageBrowser.ckFunctionNum = CkEditorImageBrowser.getQueryStringParam('CKEditorFuncNum');
-
-	CkEditorImageBrowser.initEventHandlers();
-
-	CkEditorImageBrowser.loadData(decodeURIComponent(CkEditorImageBrowser.getQueryStringParam('listUrl')), function () {
-		CkEditorImageBrowser.initFolderSwitcher();
-	});
-};
-
-CkEditorImageBrowser.loadData = function (url, onLoaded) {
-	CkEditorImageBrowser.folders = [];
-	CkEditorImageBrowser.images = {};
-
-	$.getJSON(url, function (list) {
-		$.each(list, function (_idx, item) {
-			if (typeof(item.folder) === 'undefined') {
-				item.folder = 'Images';
+	images : {},
+	
+	init : function() {
+		var head, thisdir, baseHref = IB.getQueryStringParam("baseHref");
+		if (baseHref) {
+			thisdir = location.href.replace(/\/[^\/]*(?:\?.*)?$/,"/");
+			document.getElementById("loadMsg").lastChild.lastChild.src = thisdir+"loading.gif";
+			head = (document.head || document.getElementsByTagName("head")[0]);
+			(head.getElementsByTagName("link")[0]).href = thisdir+"browser.css";
+			(head.getElementsByTagName("base")[0]).href = baseHref;
+		}
+		$("ul").on("click", "li", function() { if (IB.shown) IB.shown.className = ""; (IB.shown = this).className = "shown"; IB.renderImagesForFolder($(this).text()); });
+		$("#container").on("click", "a", function() { window.opener.CKEDITOR.tools.callFunction(IB.getQueryStringParam("CKEditorFuncNum"), this.href);	window.close();	return false; });
+		$.getJSON(IB.getQueryStringParam("listUrl"), IB.processData);
+	},
+	
+	processData : function(list) {
+		var item, folder, i, l, count = 0, $ul = $("ul"), images = IB.images;
+		for (i=0, l = list.length; i<l; i++) {
+			var item = list[i];
+			var folder = ((!item.folder)?"Images":item.folder);
+			delete item.folder;
+			if (item.imageUrl) {
+				if (!item.thumbUrl) item.thumbUrl = item.imageUrl;
+				if (!item.label) item.label = ""; else item.label = "<pre>"+item.label+"</pre>";
+				if (images.hasOwnProperty(folder)) images[folder].push(item);
+				else {
+					images[folder] = [item];
+					$("<li></li>").text(folder).appendTo($ul);
+					count++;
+				} 
 			}
-
-			CkEditorImageBrowser.ensureFolderCreated(item.folder);
-			CkEditorImageBrowser.addImage(item.folder, item.image, item.thumb);
-		});
-
-		onLoaded();
-	});
-};
-
-CkEditorImageBrowser.ensureFolderCreated = function (folderName) {
-	if (CkEditorImageBrowser.folders.indexOf(folderName) === -1) {
-		CkEditorImageBrowser.folders.push(folderName);
-		CkEditorImageBrowser.images[folderName] = [];
+		}
+		if (count>0) $($ul.get(0).firstChild).click();
+		if (count<=1) { $ul.remove(); document.getElementById("container").style.top = "0"; }
+		$("#loadMsg").remove();		
+	},
+	
+	renderImagesForFolder : function(folder) {
+		var i, l, img, images = IB.images[folder], $container = $("#container").html("");
+		for (i = 0, l = images.length; i<l; i++) {
+			img = images[i];
+			$container.append($.parseHTML('<a href="'+img.imageUrl+'"><img src="'+img.thumbUrl+'">'+img.label+'</a>'));
+		}
+	},
+	
+	getQueryStringParam : function(name) {
+		var result = window.location.search.match(new RegExp("[?&]" + name + "=([^&]*)"));
+		return ((result && (result.length > 1)) ? decodeURIComponent(result[1]) : null);
 	}
 };
 
-CkEditorImageBrowser.addImage = function (folderName, imageUrl, thumbUrl) {
-	CkEditorImageBrowser.images[folderName].push({
-		"imageUrl": imageUrl,
-		"thumbUrl": thumbUrl||imageUrl
-	});
-};
-
-CkEditorImageBrowser.initFolderSwitcher = function () {
-	var $switcher = $('#js-folder-switcher');
-
-	$switcher.find('option').remove();
-
-	$.each(CkEditorImageBrowser.folders, function (idx, folderName) {
-		var $option = $('<option></option>').val(idx).text(folderName);
-		$option.appendTo($switcher);
-	});
-
-	if (CkEditorImageBrowser.folders.length === 1) {
-		$switcher.hide();
-	}
-
-	$switcher.trigger("change");
-};
-
-CkEditorImageBrowser.renderImagesForFolder = function (folderName) {
-	var images = CkEditorImageBrowser.images[folderName],
-		templateHtml = $('#js-template-image').html(),
-		$imagesContainer = $('#js-images-container');
-
-	$imagesContainer.html('');
-
-	$.each(images, function (idx, imageData) {
-		var html = templateHtml;
-		html = html.replace('%imageUrl%', imageData.imageUrl);
-		html = html.replace('%thumbUrl%', imageData.thumbUrl);
-
-		var $item = $($.parseHTML(html));
-
-		$imagesContainer.append($item);
-	});
-};
-
-CkEditorImageBrowser.initEventHandlers = function () {
-	$('#js-folder-switcher').change(function () {
-		var idx = parseInt($(this).val(), 10),
-			folderName = CkEditorImageBrowser.folders[idx];
-
-		CkEditorImageBrowser.renderImagesForFolder(folderName);
-	});
-
-	$(document).on('click', '.js-image-link', function () {
-		var imageUrl = $(this).data('url');
-		window.opener.CKEDITOR.tools.callFunction(CkEditorImageBrowser.ckFunctionNum, imageUrl);
-		window.close();
-	});
-};
-
-CkEditorImageBrowser.getQueryStringParam = function (name) {
-	var regex = new RegExp('[\?|&]' + name + '=(.+?)[\&|$]'),
-		result = window.location.search.match(regex);
-
-	return (result && result.length > 1 ? result[1] : null);
-};
+$(document).ready(IB.init);
