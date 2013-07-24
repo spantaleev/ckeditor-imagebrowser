@@ -34,7 +34,7 @@ var IB = {
 				} 
 			}
 		}
-		if (count>0) $($ul.get(0).firstChild).click();
+		if (count>0) $($ul.get(0).firstChild).click(); else $('#container').html('<div style="text-align:center;margin-top:100px;font-size:24px"><i>No images found!</i></div>');
 		if (count<=1) { $ul.remove(); document.getElementById("container").style.top = "0"; }
 		$("#loadMsg").remove();		
 	},
