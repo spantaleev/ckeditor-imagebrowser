@@ -5,12 +5,14 @@ CkEditorImageBrowser.images = {}; //folder => list of images
 CkEditorImageBrowser.ckFunctionNum = null;
 
 CkEditorImageBrowser.init = function () {
-	var baseHref = decodeURIComponent(CkEditorImageBrowser.getQueryStringParam("baseHref"));
+	var baseHref = CkEditorImageBrowser.getQueryStringParam("baseHref");
 	if (baseHref) {
-		var h = (document.head || document.getElementsByTagName("head")[0]), el = h.getElementsByTagName("link")[0];
+		var h = (document.head || document.getElementsByTagName("head")[0]),
+			el = h.getElementsByTagName("link")[0];
 		el.href = location.href.replace(/\/[^\/]*$/,"/browser.css");
-		(h.getElementsByTagName("base")[0]).href = baseHref;
+		(h.getElementsByTagName("base")[0]).href = decodeURIComponent(baseHref);
 	}
+
 	CkEditorImageBrowser.ckFunctionNum = CkEditorImageBrowser.getQueryStringParam('CKEditorFuncNum');
 
 	CkEditorImageBrowser.initEventHandlers();
