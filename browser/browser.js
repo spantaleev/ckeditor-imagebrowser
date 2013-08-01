@@ -50,7 +50,7 @@ CkEditorImageBrowser.loadData = function (url, onLoaded) {
 };
 
 CkEditorImageBrowser.addImage = function (folderName, imageUrl, thumbUrl) {
-	if (CkEditorImageBrowser.folders.indexOf(folderName) === -1) {
+	if (typeof(CkEditorImageBrowser.images[folderName]) === 'undefined') {
 		CkEditorImageBrowser.folders.push(folderName);
 		CkEditorImageBrowser.images[folderName] = [];
 	}
