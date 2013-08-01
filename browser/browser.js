@@ -5,6 +5,14 @@ CkEditorImageBrowser.images = {}; //folder => list of images
 CkEditorImageBrowser.ckFunctionNum = null;
 
 CkEditorImageBrowser.init = function () {
+	var baseHref = CkEditorImageBrowser.getQueryStringParam("baseHref");
+	if (baseHref) {
+		var h = (document.head || document.getElementsByTagName("head")[0]),
+			el = h.getElementsByTagName("link")[0];
+		el.href = location.href.replace(/\/[^\/]*$/,"/browser.css");
+		(h.getElementsByTagName("base")[0]).href = decodeURIComponent(baseHref);
+	}
+
 	CkEditorImageBrowser.ckFunctionNum = CkEditorImageBrowser.getQueryStringParam('CKEditorFuncNum');
 
 	CkEditorImageBrowser.initEventHandlers();
@@ -24,7 +32,10 @@ CkEditorImageBrowser.loadData = function (url, onLoaded) {
 				item.folder = 'Images';
 			}
 
-			CkEditorImageBrowser.ensureFolderCreated(item.folder);
+			if (typeof(item.thumb) === 'undefined') {
+				item.thumb = item.image;
+			}
+
 			CkEditorImageBrowser.addImage(item.folder, item.image, item.thumb);
 		});
 
@@ -32,14 +43,12 @@ CkEditorImageBrowser.loadData = function (url, onLoaded) {
 	});
 };
 
-CkEditorImageBrowser.ensureFolderCreated = function (folderName) {
+CkEditorImageBrowser.addImage = function (folderName, imageUrl, thumbUrl) {
 	if (CkEditorImageBrowser.folders.indexOf(folderName) === -1) {
 		CkEditorImageBrowser.folders.push(folderName);
 		CkEditorImageBrowser.images[folderName] = [];
 	}
-};
 
-CkEditorImageBrowser.addImage = function (folderName, imageUrl, thumbUrl) {
 	CkEditorImageBrowser.images[folderName].push({
 		"imageUrl": imageUrl,
 		"thumbUrl": thumbUrl
@@ -90,8 +99,7 @@ CkEditorImageBrowser.initEventHandlers = function () {
 	});
 
 	$(document).on('click', '.js-image-link', function () {
-		var imageUrl = $(this).data('url');
-		window.opener.CKEDITOR.tools.callFunction(CkEditorImageBrowser.ckFunctionNum, imageUrl);
+		window.opener.CKEDITOR.tools.callFunction(CkEditorImageBrowser.ckFunctionNum, $(this).data('url'));
 		window.close();
 	});
 };

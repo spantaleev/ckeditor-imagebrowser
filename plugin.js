@@ -4,6 +4,11 @@ CKEDITOR.plugins.add('imagebrowser', {
 			return;
 		}
 
-		editor.config.filebrowserImageBrowseUrl = editor.plugins.imagebrowser.path + "browser/browser.html?listUrl=" + encodeURIComponent(editor.config.imageBrowser_listUrl);
+		var url = editor.plugins.imagebrowser.path + "browser/browser.html?listUrl=" + encodeURIComponent(editor.config.imageBrowser_listUrl);
+		if (editor.config.baseHref) {
+			url += "&baseHref=" + encodeURIComponent(editor.config.baseHref);
+		}
+
+		editor.config.filebrowserImageBrowseUrl = url;
 	}
 });
