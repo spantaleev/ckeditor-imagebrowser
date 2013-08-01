@@ -17,6 +17,9 @@ Installation
 
 Copy the whole contents of this repository into a new ``plugins/imagebrowser`` directory in your CKEditor install.
 
+Make sure you're using the **Standard** or **Full** `CKEditor packages <http://ckeditor.com/download>`_.
+The **Basic** package lacks an in-built "File Browser" plugin, which this plugin depends on.
+You can also use a `Custom CKEditor package <http://ckeditor.com/builder>`_, if you build it with "File Browser" plugin support.
 
 Usage
 -----
