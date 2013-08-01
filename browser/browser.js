@@ -58,10 +58,10 @@ CkEditorImageBrowser.addImage = function (folderName, imageUrl, thumbUrl) {
 CkEditorImageBrowser.initFolderSwitcher = function () {
 	var $switcher = $('#js-folder-switcher');
 
-	$switcher.find('option').remove();
+	$switcher.find('li').remove();
 
 	$.each(CkEditorImageBrowser.folders, function (idx, folderName) {
-		var $option = $('<option></option>').val(idx).text(folderName);
+		var $option = $('<li></li>').data('idx', idx).text(folderName);
 		$option.appendTo($switcher);
 	});
 
@@ -69,7 +69,7 @@ CkEditorImageBrowser.initFolderSwitcher = function () {
 		$switcher.hide();
 	}
 
-	$switcher.trigger("change");
+	$switcher.find('li:first').click();
 };
 
 CkEditorImageBrowser.renderImagesForFolder = function (folderName) {
@@ -79,7 +79,7 @@ CkEditorImageBrowser.renderImagesForFolder = function (folderName) {
 
 	$imagesContainer.html('');
 
-	$.each(images, function (idx, imageData) {
+	$.each(images, function (_idx, imageData) {
 		var html = templateHtml;
 		html = html.replace('%imageUrl%', imageData.imageUrl);
 		html = html.replace('%thumbUrl%', imageData.thumbUrl);
@@ -91,9 +91,12 @@ CkEditorImageBrowser.renderImagesForFolder = function (folderName) {
 };
 
 CkEditorImageBrowser.initEventHandlers = function () {
-	$('#js-folder-switcher').change(function () {
-		var idx = parseInt($(this).val(), 10),
+	$(document).on('click', '#js-folder-switcher li', function () {
+		var idx = parseInt($(this).data('idx'), 10),
 			folderName = CkEditorImageBrowser.folders[idx];
+
+		$(this).siblings('li').removeClass('active');
+		$(this).addClass('active');
 
 		CkEditorImageBrowser.renderImagesForFolder(folderName);
 	});
