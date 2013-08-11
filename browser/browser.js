@@ -16,14 +16,14 @@ CkEditorImageBrowser.init = function () {
 		var h = (document.head || document.getElementsByTagName("head")[0]),
 			el = h.getElementsByTagName("link")[0];
 		el.href = location.href.replace(/\/[^\/]*$/,"/browser.css");
-		(h.getElementsByTagName("base")[0]).href = decodeURIComponent(baseHref);
+		(h.getElementsByTagName("base")[0]).href = baseHref;
 	}
 
 	CkEditorImageBrowser.ckFunctionNum = CkEditorImageBrowser.getQueryStringParam('CKEditorFuncNum');
 
 	CkEditorImageBrowser.initEventHandlers();
 
-	CkEditorImageBrowser.loadData(decodeURIComponent(CkEditorImageBrowser.getQueryStringParam('listUrl')), function () {
+	CkEditorImageBrowser.loadData(CkEditorImageBrowser.getQueryStringParam('listUrl'), function () {
 		CkEditorImageBrowser.initFolderSwitcher();
 	});
 };
@@ -119,8 +119,8 @@ CkEditorImageBrowser.initEventHandlers = function () {
 };
 
 CkEditorImageBrowser.getQueryStringParam = function (name) {
-	var regex = new RegExp('[\?|&]' + name + '=(.+?)[\&|$]'),
+	var regex = new RegExp('[?&]' + name + '=([^&]*)'),
 		result = window.location.search.match(regex);
 
-	return (result && result.length > 1 ? result[1] : null);
+	return (result && result.length > 1 ? decodeURIComponent(result[1]) : null);
 };
