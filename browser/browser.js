@@ -46,7 +46,17 @@ CkEditorImageBrowser.loadData = function (url, onLoaded) {
 		});
 
 		onLoaded();
-	});
+	}).error(function(jqXHR, textStatus, errorThrown) {
+		var errorMessage;
+		if (jqXHR.status < 200 || jqXHR.status >= 400) {
+			errorMessage = 'HTTP Status: ' + jqXHR.status + '/' + jqXHR.statusText + ': "<strong style="color: red;">' + url + '</strong>"';
+		} else if (textStatus === 'parsererror') {
+			errorMessage = textStatus + ': invalid JSON file: "<strong style="color: red;">' + url + '</strong>": ' + errorThrown.message;
+		} else {
+			errorMessage = textStatus + ' / ' + jqXHR.statusText + ' / ' + errorThrown.message;
+		}
+		CkEditorImageBrowser.$imagesContainer.html(errorMessage);
+    });
 };
 
 CkEditorImageBrowser.addImage = function (folderName, imageUrl, thumbUrl) {
