@@ -2,7 +2,7 @@
 
 **imagebrowser** is a [CKEditor](http://ckeditor.com/) plugin that allows images on the server to be browsed and picked for inclusion into the editor's contents.
 
-You can view the working demo [HERE](http://devture.com/projects/ckeditor-imagebrowser/demo/index.html).
+You can view the working demo [HERE](http://devture.com/projects/ckeditor-imagebrowser).
 
 ![screenshot](https://raw2.github.com/spantaleev/ckeditor-imagebrowser/demo/ckeditor-imagebrowser-screenshot.jpg)
 
