@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang='en'>
+<head>
+	<meta charset='utf-8'>
+	<title>
+		CKEditor Image Browser example
+	</title>
+	<link rel="stylesheet" href="styles.css" />
+	<script type="text/javascript" src="../ckeditor/ckeditor.js"></script>
+</head>
+<body>
+	<a href="https://github.com/spantaleev/ckeditor-imagebrowser" target="_blank"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_green_007200.png" alt="Fork me on GitHub"></a>
+	<div id="wrapper">
+		<h1 class="main-title">CKEditor Image Browser</h1>
+		<div class="example">
+			<h1 class="example-title">Example</h1>
+			<div class="example-container">
+				This CKEditor <a href="http://ckeditor.com/addon/imagebrowser" target="_blank">Image Browser plugin</a> allows images on the server to be browsed and picked for inclusion into the editor's contents.
+				<br />
+				More detailed information about initializing and configuring the plugin could be found on the <a href="https://github.com/spantaleev/ckeditor-imagebrowser" target="_blank">README</a> file.
+				<br />
+				Please note that this plugin serves as image picker only and <strong>does NOT upload pictures</strong> to your server!
+				<p class="try">
+					Try it here:
+					<br />
+					<span class="tooltip">for example, click the Image button and the "Browse Server" button after that.</span>
+				</p>
+				<p id="warning">Example won't work locally!</p>
+				<textarea id="js-my-textarea">Click the image button</textarea>
+			</div>
+		</div>
+		<p>
+			To install this plugin, simply copy the imagebrowser folder into the <code>ckeditor/plugins/</code> where the rest of the CKEditor plugins are.
+			<br /><br />
+			Once you have copied everything to <code>ckeditor/plugins/imagebrowser</code>, you are almost ready to use it!
+			<br />
+			<br />
+			<script src="https://gist.github.com/beastafk/8363959.js"></script>
+			<code>imageBrowser_listUrl</code> specifies the absolute path to your JSON file, which contains the information and paths for your images.
+			<br />
+			<br />
+			The JSON file should have the following format:
+
+			<br />
+			<br />
+			<script src="https://gist.github.com/beastafk/8363983.js"></script>
+			<p>The <code>image</code> property is the only one required for the plugin to work. The paths are also absolute.
+		</p>
+		<br />
+		<script>
+			CKEDITOR.replace('js-my-textarea', {
+				"extraPlugins" : 'imagebrowser',
+				"imageBrowser_listUrl" : "/ckeditor-imagebrowser/demo/images/images_list.json"
+			});
+
+			if (window.location.protocol === "file:") {
+				document.getElementById("warning").style.display = "block";
+			}
+		</script>
+		<footer>
+			&copy; 2013 <a href="http://devture.com" target="_blank">Devture Ltd</a>
+		</footer>
+	</div>
+</body>
+</html>

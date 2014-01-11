@@ -1,0 +1,12 @@
+[
+	{
+		"image": "/ckeditor-imagebrowser/demo/images/image_big.jpg",
+		"thumb": "/ckeditor-imagebrowser/demo/images/image_small.jpg",
+		"folder": "color"
+	},
+	{
+		"image": "/ckeditor-imagebrowser/demo/images/image_bw_big.jpg",
+		"thumb": "/ckeditor-imagebrowser/demo/images/image_bw_small.jpg",
+		"folder": "grayscale"
+	}
+]

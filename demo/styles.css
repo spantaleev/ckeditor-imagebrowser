@@ -1,0 +1,133 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+	font-size: 14px;
+}
+
+a {
+	text-decoration: none;
+	color: #008FFF;
+}
+
+p {
+	padding: 10px 0;
+}
+
+#wrapper {
+	width: 1080px;
+	margin: 0 auto;
+	padding-left: 20px;
+}
+
+.main-title {
+	font-size: 45px;
+	color: #353535;
+	text-shadow: 0 1px 1px #999;
+	margin: 10px 0;
+}
+
+.example {
+	margin-bottom: 12px;
+}
+
+.example-title{
+	border-bottom: 1px solid #bbb;
+	background: #eee;
+	background-image: -webkit-linear-gradient(#e9e9e9, #d7d7d7);
+	background-image: -moz-linear-gradient(#e9e9e9, #d7d7d7);
+	background-image: -o-linear-gradient(#e9e9e9, #d7d7d7);
+	text-shadow: 0 1px 1px #fff;
+	margin: 0;
+	font-weight: normal;
+	font-weight: bold;
+	text-align: left;
+	color: #474d57;
+	padding: 9px 10px;
+	height: 22px;
+	font-size: 23px;
+}
+
+.example-container {
+	padding: 20px;
+	font-size: 14px;
+	line-height: 1.6;
+	border: 1px solid #A5A5A5;
+	border-top: none;
+}
+
+input {
+	width: 500px;
+	height: 25px;
+	background-color: #D2D5DA;
+	background-color: rgba(255,255,255,0.5);
+	border: 1px solid #AAA;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 3px;
+	-ms-border-radius: 3px;
+	-o-border-radius: 3px;
+	border-radius: 5px;
+	border: 3px solid #B2B4D5;
+	box-shadow: none;
+	outline: none;
+	padding-left: 10px;
+	height: 42px;
+	line-height: 18px;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+.example-highlight {
+	color: #1F9440;
+	font-weight: bold;
+}
+
+.suggestor-suggestion a img {
+	vertical-align: middle;
+}
+
+.try {
+	text-shadow: 0 1px 1px #999;
+	font-weight: bold;
+	text-align: left;
+	color: #313336;
+	font-size: 23px;
+}
+
+.tooltip {
+	font-size: 14px;
+	font-style: italic;
+	font-weight: normal;
+}
+
+.tooltip span {
+	color: #d14;
+	text-shadow: none;
+	font-size: 18px;
+}
+
+code {
+	padding: 2px 4px;
+	color: #139237;
+	background-color: rgb(247, 247, 249);
+	border: 1px solid rgb(225, 225, 232);
+	white-space: nowrap;
+}
+
+#warning {
+	color: #FF3030;;
+	font-size: 24px;
+	text-shadow: 1px 1px 1px rgb(131, 131, 131);
+	display: none;
+}
+
+footer {
+	color: #706D6D;
+	height: 40px;
+	text-align: right;
+	padding: 10px 0;
+	border-top: 1px solid rgb(238, 238, 238);
+}
