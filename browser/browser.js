@@ -28,6 +28,7 @@ CkEditorImageBrowser.init = function () {
 		if (!CkEditorImageBrowser.searchAble) {
 			$("#filter-text-container").remove();
 		}
+		CkEditorImageBrowser.folders.sort();
 		CkEditorImageBrowser.initFolderSwitcher();
 	});
 };
@@ -39,8 +40,17 @@ CkEditorImageBrowser.loadData = function (url, onLoaded) {
 
 	$.getJSON(url, function (list) {
 		$.each(list, function (_idx, item) {
-			if (typeof(item.folder) === 'undefined') {
+			if (typeof(item.folder) === 'undefined' || item.folder.length == 0) {
 				item.folder = 'Images';
+			} else if (Object.prototype.toString.call( item.folder ) !== '[object Array]' && Object.prototype.toString.call( item.folder ) !== '[object Object]' ) {
+				var foundOne = false;
+				$.each(item.folder,function(index, value) {
+					foundOne = true;
+					return false;
+				});
+				if (!foundOne) {
+					item.folder = 'Images';
+				}
 			}
 
 			if (typeof(item.thumb) === 'undefined') {
@@ -70,15 +80,23 @@ CkEditorImageBrowser.loadData = function (url, onLoaded) {
 };
 
 CkEditorImageBrowser.addImage = function (folderName, imageUrl, thumbUrl, imageDescription) {
-	if (typeof(CkEditorImageBrowser.images[folderName]) === 'undefined') {
-		CkEditorImageBrowser.folders.push(folderName);
-		CkEditorImageBrowser.images[folderName] = [];
+	var folderList = new Array();
+	if (Object.prototype.toString.call( folderName ) !== '[object Array]' && Object.prototype.toString.call( folderName ) !== '[object Object]' ) {
+		folderList[0] = folderName;
+	} else {
+		folderList = folderName;
 	}
+	$.each(folderList,function(index, folderName) {
+		if (typeof(CkEditorImageBrowser.images[folderName]) === 'undefined') {
+			CkEditorImageBrowser.folders.push(folderName);
+			CkEditorImageBrowser.images[folderName] = [];
+		}
 
-	CkEditorImageBrowser.images[folderName].push({
-		"imageUrl": imageUrl,
-		"thumbUrl": thumbUrl,
-		"imageDescription": imageDescription
+		CkEditorImageBrowser.images[folderName].push({
+			"imageUrl": imageUrl,
+			"thumbUrl": thumbUrl,
+			"imageDescription": imageDescription
+		});
 	});
 };
 
