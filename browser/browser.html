@@ -8,10 +8,15 @@
 
 	<body>
 		<script type="text/x-template-html" id="js-template-image">
-			<a href="javascript://" class="thumbnail js-image-link" data-url="%imageUrl%"><img src="%thumbUrl%"></a>
+			<div class="image-div">
+				<a href="javascript://" class="thumbnail js-image-link" data-url="%imageUrl%"><img src="%thumbUrl%"></a>
+				<p class="caption">%imageDescription%</p>
+			</div>
 		</script>
 
 		<ul class="folder-switcher" id="js-folder-switcher"></ul>
+
+		<div id="filter-text-container"><p><label for="filter-text">Search</label><input type="text" id="filter-text"></p></div>
 
 		<div class="images-container" id="js-images-container">Loading..</div>
 

@@ -3,6 +3,7 @@ var CkEditorImageBrowser = {};
 CkEditorImageBrowser.folders = [];
 CkEditorImageBrowser.images = {}; //folder => list of images
 CkEditorImageBrowser.ckFunctionNum = null;
+CkEditorImageBrowser.searchAble = true;
 
 CkEditorImageBrowser.$folderSwitcher = null;
 CkEditorImageBrowser.$imagesContainer = null;
@@ -24,6 +25,10 @@ CkEditorImageBrowser.init = function () {
 	CkEditorImageBrowser.initEventHandlers();
 
 	CkEditorImageBrowser.loadData(CkEditorImageBrowser.getQueryStringParam('listUrl'), function () {
+		if (!CkEditorImageBrowser.searchAble) {
+			$("#filter-text-container").remove();
+		}
+		CkEditorImageBrowser.folders.sort();
 		CkEditorImageBrowser.initFolderSwitcher();
 	});
 };
@@ -31,20 +36,35 @@ CkEditorImageBrowser.init = function () {
 CkEditorImageBrowser.loadData = function (url, onLoaded) {
 	CkEditorImageBrowser.folders = [];
 	CkEditorImageBrowser.images = {};
+	CkEditorImageBrowser.searchAble = false;
 
 	$.getJSON(url, function (list) {
 		$.each(list, function (_idx, item) {
-			if (typeof(item.folder) === 'undefined') {
+			if (typeof(item.folder) === 'undefined' || item.folder.length == 0) {
 				item.folder = 'Images';
+			} else if (Object.prototype.toString.call( item.folder ) !== '[object Array]' && Object.prototype.toString.call( item.folder ) !== '[object Object]' ) {
+				var foundOne = false;
+				$.each(item.folder,function(index, value) {
+					foundOne = true;
+					return false;
+				});
+				if (!foundOne) {
+					item.folder = 'Images';
+				}
 			}
 
 			if (typeof(item.thumb) === 'undefined') {
 				item.thumb = item.image;
 			}
 
-			CkEditorImageBrowser.addImage(item.folder, item.image, item.thumb);
-		});
+			if (typeof(item.description) === 'undefined') {
+				item.description = "";
+			} else if (item.description != "") {
+				CkEditorImageBrowser.searchAble = true;
+			}
 
+			CkEditorImageBrowser.addImage(item.folder, item.image, item.thumb, item.description);
+		});
 		onLoaded();
 	}).error(function(jqXHR, textStatus, errorThrown) {
 		var errorMessage;
@@ -59,15 +79,24 @@ CkEditorImageBrowser.loadData = function (url, onLoaded) {
     });
 };
 
-CkEditorImageBrowser.addImage = function (folderName, imageUrl, thumbUrl) {
-	if (typeof(CkEditorImageBrowser.images[folderName]) === 'undefined') {
-		CkEditorImageBrowser.folders.push(folderName);
-		CkEditorImageBrowser.images[folderName] = [];
+CkEditorImageBrowser.addImage = function (folderName, imageUrl, thumbUrl, imageDescription) {
+	var folderList = new Array();
+	if (Object.prototype.toString.call( folderName ) !== '[object Array]' && Object.prototype.toString.call( folderName ) !== '[object Object]' ) {
+		folderList[0] = folderName;
+	} else {
+		folderList = folderName;
 	}
+	$.each(folderList,function(index, folderName) {
+		if (typeof(CkEditorImageBrowser.images[folderName]) === 'undefined') {
+			CkEditorImageBrowser.folders.push(folderName);
+			CkEditorImageBrowser.images[folderName] = [];
+		}
 
-	CkEditorImageBrowser.images[folderName].push({
-		"imageUrl": imageUrl,
-		"thumbUrl": thumbUrl
+		CkEditorImageBrowser.images[folderName].push({
+			"imageUrl": imageUrl,
+			"thumbUrl": thumbUrl,
+			"imageDescription": imageDescription
+		});
 	});
 };
 
@@ -104,6 +133,7 @@ CkEditorImageBrowser.renderImagesForFolder = function (folderName) {
 		var html = templateHtml;
 		html = html.replace('%imageUrl%', imageData.imageUrl);
 		html = html.replace('%thumbUrl%', imageData.thumbUrl);
+		html = html.replace('%imageDescription%', imageData.imageDescription);
 
 		var $item = $($.parseHTML(html));
 
@@ -118,13 +148,29 @@ CkEditorImageBrowser.initEventHandlers = function () {
 
 		$(this).siblings('li').removeClass('active');
 		$(this).addClass('active');
-
 		CkEditorImageBrowser.renderImagesForFolder(folderName);
+		$(".image-div").show();
+		$("#filter-text").val("").focus();
 	});
 
 	$(document).on('click', '.js-image-link', function () {
 		window.opener.CKEDITOR.tools.callFunction(CkEditorImageBrowser.ckFunctionNum, $(this).data('url'));
 		window.close();
+	});
+	$(document).on('keyup', '#filter-text', function() {
+		var filterValue = $(this).val();
+		if (filterValue == "") {
+			$(".image-div").show();
+		} else {
+			$(".image-div").each(function() {
+				var description = $(this).find(".caption").html();
+				if (description.toLowerCase().indexOf(filterValue.toLowerCase()) >= 0) {
+					$(this).show();
+				} else {
+					$(this).hide();
+				}
+			});
+		}
 	});
 };
 
